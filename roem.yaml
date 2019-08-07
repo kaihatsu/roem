@@ -1,0 +1,86 @@
+name: ROEM
+
+symbols:
+
+   exogenous: [e_a1, e_a2]
+   states: [a1, a2, d]
+   controls: [b, p, m1, m2]
+   #auxiliaries: [y1, y2, c1, c2, Lambda]
+   #expectations: [m1, m2]
+   values: [V1, V2]
+   parameters: [beta, rho, a1_0, a2_0, a1_bar, a2_bar, sig_a1, sig_a2, corr_a, b_lower, b_upper]
+
+definitions:
+
+    y1: exp(a1)
+    y2: exp(a2)
+    c1: y1 + d - b*p
+    c2: y2 - d + b*p
+    Lambda: (b-b_lower)/(b_upper-b_lower)
+    #rk: alpha*y/k
+    #w: (1-alpha)*y/n
+
+equations:
+
+    arbitrage:
+        - m2 - m1  | b_lower <= b <= b_upper
+        - p = Lambda*m1 + (1-Lambda)*m2   #| -inf <= p <= inf
+        - m1 = beta*(c1/c1(1))
+        - m2 = beta*(c2/c2(1))
+ 
+    transition:
+        - a1 = (1-rho)*a1_0 + rho*a1(-1) + e_a1
+        - a2 = (1-rho)*a2_0 + rho*a2(-1) + e_a2
+        - d = b(-1)
+
+    value:
+        - V1 = log(c1) + beta*V1(1)
+        - V2 = log(c2) + beta*V2(1)
+
+calibration:
+
+    # parameters
+    beta : 0.96
+    b_lower : -10
+    b_upper : 10
+    rho  : 0.9
+    a1_bar : 1
+    a2_bar : 1
+    a1_0   : 1
+    a2_0   : 1 # .5
+    sig_a1 : 0.025
+    sig_a2 : 0.05
+    corr_a : 0
+
+    # endogenous variables
+    a1 : a1_bar
+    a2 : a1_bar
+    d  : 0
+    b  : d
+    p  : beta
+    y1 : exp(a1)
+    y2 : exp(a2)
+    c1 : y1 + d - b*p
+    c2 : y2 - d + b*p
+    m1 : beta
+    m2 : beta
+    V1 : log(c1)
+    V2 : log(c2)
+    Lambda : (b-b_lower)/(b_upper-b_lower)
+
+exogenous: !Normal
+    Sigma: [[ sig_a1, corr_a ],
+            [ corr_a, sig_a2 ]]
+
+domain:
+    a1 : [-2*sig_a1/(1-rho^2)^0.5,  2*sig_a1/(1-rho^2)^0.5]
+    a2 : [-2*sig_a2/(1-rho^2)^0.5,  2*sig_a2/(1-rho^2)^0.5]
+    d  : [1, 10]
+
+options:
+    grid: !Cartesian
+        b: [3, 3, 30]
+# options:
+#     grid: !Smolyak
+#         mu: 3
+#         # orders: [5, 50]
