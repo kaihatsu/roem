@@ -4,8 +4,7 @@ symbols:
 
    exogenous: [e_a1, e_a2]
    states: [a1, a2, d]
-   controls: [b, p]
-   expectations: [m1, m2]
+   controls: [b, p, m1, m2]
    values: [V1, V2]
    parameters: [beta, rho, a1_0, a2_0, a1_bar, a2_bar, sig_a1, sig_a2, corr_a, b_lower, b_upper]
 
