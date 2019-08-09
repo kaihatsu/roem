@@ -42,8 +42,8 @@ calibration:
     sig_a2  : 0.05
     corr_a  : 0
 
-    # exogenous variables (initial values)
-    a1      : log(2)
+    # exogenous variables
+    a1      : 0
     a2      : 0
 
     # endogenous variables
