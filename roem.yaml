@@ -43,8 +43,8 @@ calibration:
     corr_a  : 0
 
     # exogenous variables (initial values)
-    a1      : 1
-    a2      : 0.5
+    a1      : 0
+    a2      : 0
 
     # endogenous variables
     d  : 0
