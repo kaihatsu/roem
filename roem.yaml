@@ -70,7 +70,7 @@ domain:
 
 options:
     grid: !Cartesian
-        Order: [15]
+        Order: [30]
 # options:
 #     grid: !Smolyak
 #         mu: 3
