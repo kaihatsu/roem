@@ -43,8 +43,8 @@ calibration:
     sig_a1  : 0.025
     sig_a2  : 0.05
     corr_a  : 0
-    a1      : 1
-    a2      : 1 #0. 5
+    a1      : 0.2
+    a2      : 0.1 #0. 5
 
     # endogenous variables
     d  : 0
