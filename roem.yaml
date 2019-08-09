@@ -2,11 +2,11 @@ name: ROEM
 
 symbols:
 
-   exogenous: [e_a1, e_a2]
-   states: [a1, a2, d]
+   exogenous: [a1, a2]
+   states: [d]
    controls: [b, p, m1, m2]
    values: [V1, V2]
-   parameters: [beta, rho, a1_0, a2_0, a1_bar, a2_bar, sig_a1, sig_a2, corr_a, b_lower, b_upper]
+   parameters: [beta, a_rho, a1_0, a2_0, a1_bar, a2_bar, sig_a1, sig_a2, corr_a, b_lower, b_upper]
 
 definitions:
 
@@ -15,8 +15,6 @@ definitions:
     c1: y1 + d - b*p
     c2: y2 - d + b*p
     Lambda: (b-b_lower)/(b_upper-b_lower)
-    #rk: alpha*y/k
-    #w: (1-alpha)*y/n
 
 equations:
 
@@ -27,8 +25,6 @@ equations:
         - m2 = beta*(c2/c2(1))
  
     transition:
-        - a1 = (1-rho)*a1_0 + rho*a1(-1) + e_a1
-        - a2 = (1-rho)*a2_0 + rho*a2(-1) + e_a2
         - d = b(-1)
 
     value:
@@ -38,21 +34,19 @@ equations:
 calibration:
 
     # parameters
-    beta : 0.96
+    beta    : 0.96
     b_lower : -10
     b_upper : 10
-    rho  : 0.9
-    a1_bar : 1
-    a2_bar : 1
-    a1_0   : 1
-    a2_0   : 1 # .5
-    sig_a1 : 0.025
-    sig_a2 : 0.05
-    corr_a : 0
+    a_rho   : 0.9
+    a1_bar  : 1
+    a2_bar  : 1
+    sig_a1  : 0.025
+    sig_a2  : 0.05
+    corr_a  : 0
+    a1      : 1
+    a2      : 0.5
 
     # endogenous variables
-    a1 : a1_bar
-    a2 : a1_bar
     d  : 0
     b  : d
     p  : beta
@@ -66,7 +60,8 @@ calibration:
     V2 : log(c2)
     Lambda : (b-b_lower)/(b_upper-b_lower)
 
-exogenous: !Normal
+exogenous: !Varl
+    rho: a_rho
     Sigma: [[ sig_a1, corr_a ],
             [ corr_a, sig_a2 ]]
 
@@ -77,7 +72,7 @@ domain:
 
 options:
     grid: !Cartesian
-        b: [3, 3, 15]
+        Order: [30]
 # options:
 #     grid: !Smolyak
 #         mu: 3
