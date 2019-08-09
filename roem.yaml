@@ -60,14 +60,12 @@ calibration:
     V2 : log(c2)
     Lambda : (b-b_lower)/(b_upper-b_lower)
 
-exogenous: !VARl
+exogenous: !VAR1
     rho: a_rho
     Sigma: [[ sig_a1, corr_a ],
             [ corr_a, sig_a2 ]]
 
 domain:
-    a1 : [-2*sig_a1/(1-rho^2)^0.5,  2*sig_a1/(1-rho^2)^0.5]
-    a2 : [-2*sig_a2/(1-rho^2)^0.5,  2*sig_a2/(1-rho^2)^0.5]
     d  : [1, 10]
 
 options:
