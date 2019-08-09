@@ -6,7 +6,7 @@ symbols:
    states: [d]
    controls: [b, p, m1, m2]
    values: [V1, V2]
-   parameters: [beta, a_rho, a1_0, a2_0, a1_bar, a2_bar, sig_a1, sig_a2, corr_a, b_lower, b_upper]
+   parameters: [beta, a_rho, a1_bar, a2_bar, sig_a1, sig_a2, corr_a, b_lower, b_upper]
 
 definitions:
 
