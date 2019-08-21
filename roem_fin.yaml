@@ -19,8 +19,8 @@ definitions:
 equations:
 
     arbitrage:
-        - m2*f - m1*f  | b_lower <= b <= b_upper
-        - p = Lambda*m1*f + (1-Lambda)*m2*f   #| -inf <= p <= inf
+        - m2*f(1) - m1*f(1)  | b_lower <= b <= b_upper
+        - p = Lambda*m1*f(1) + (1-Lambda)*m2*f(1)   #| -inf <= p <= inf
         - m1 = beta*(c1/c1(1))
         - m2 = beta*(c2/c2(1))
  
