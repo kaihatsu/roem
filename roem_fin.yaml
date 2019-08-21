@@ -2,8 +2,8 @@ name: ROEM_Fin
 
 symbols:
 
-   exogenous: [a1, a2, f]
-   states: [d]
+   exogenous: [e_a1, e_a2, e_f]
+   states: [d, a1, a2, f]
    controls: [b, p, m1, m2]
    values: [V1, V2]
    parameters: [beta, b_lower, b_upper, rho_a, sig_a1, sig_a2, corr_a, rho_f, sig_f]
@@ -25,7 +25,10 @@ equations:
         - m2 = beta*(c2/c2(1))
  
     transition:
-        - d = b(-1)
+        - d  = b(-1)
+        - a1 = rho_a*a1(-1) + e_a1
+        - a2 = rho_a*a2(-1) + e_a2
+        - f  = rho_f*f(-1)  + e_f
 
     value:
         - V1 = log(c1) + beta*V1(1)
@@ -43,11 +46,14 @@ calibration:
     corr_a  : 0
     rho_f   : 0
     sig_f   : 0.02
-
-    # exogenous variables
     a1      : 0
     a2      : 0
     f       : 0
+    
+    # exogenous variables
+    e_a1      : 0
+    e_a2      : 0
+    e_f       : 0
 
     # endogenous variables
     d  : 0
@@ -63,27 +69,35 @@ calibration:
     V2 : log(c2)
     Lambda : (b-b_lower)/(b_upper-b_lower)
 
-exogenous:
-    a1, a2: !VAR1
-        rho: rho_a
-        Sigma: [[ sig_a1, corr_a ],
-                [ corr_a, sig_a2 ]]
+exogenous: !Normal
+        Sigma: [[ sig_a1^2, corr_a  , 0      ],
+                [ corr_a  , sig_a2^2, 0      ]
+                [ 0       , 0       , sig_f^2]]
 
-    f: !VAR1
-        rho: rho_f
-        Sigma: [[sig_f]]
+#exogenous:
+#    a1, a2: !VAR1
+#        rho: rho_a
+#        Sigma: [[ sig_a1^2, corr_a   ],
+#                [ corr_a  , sig_a2^2 ]]
+#
+#    f: !VAR1
+#        rho: rho_f
+#        Sigma: [[sig_f^2]]
 
 #exogenous: !VAR1
 #    rho: a_rho
-#    Sigma: [[ sig_a1, corr_a ],
-#            [ corr_a, sig_a2 ]]
+#    Sigma: [[ sig_a1^2, corr_a   ],
+#            [ corr_a  , sig_a2^2 ]]
 
 domain:
     d  : [-5, 5]
+    a1 : [-3*sig_a1, 3*sig_a1]
+    a2 : [-3*sig_a2, 3*sig_a2]
+    f  : [-3*sig_f , 3*sig_f ]
 
 options:
     grid: !Cartesian
-        Order: [30]
+        Order: [30, 3, 3, 3]
 # options:
 #     grid: !Smolyak
 #         mu: 3
