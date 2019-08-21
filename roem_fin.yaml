@@ -19,10 +19,10 @@ definitions:
 equations:
 
     arbitrage:
-        - m2 - m1  | b_lower <= b <= b_upper
-        - p = Lambda*m1 + (1-Lambda)*m2   #| -inf <= p <= inf
-        - m1 = f*beta*(c1/c1(1))
-        - m2 = f*beta*(c2/c2(1))
+        - m2*f - m1*f  | b_lower <= b <= b_upper
+        - p = Lambda*m1*f + (1-Lambda)*m2*f   #| -inf <= p <= inf
+        - m1 = beta*(c1/c1(1))
+        - m2 = beta*(c2/c2(1))
  
     transition:
         - d = b(-1)
@@ -55,8 +55,8 @@ calibration:
     p  : beta
     y1 : exp(a1)
     y2 : exp(a2)
-    c1 : y1 + d - b*p
-    c2 : y2 - d + b*p
+    c1 : y1 + d*f - b*p
+    c2 : y2 - d*f + b*p
     m1 : beta
     m2 : beta
     V1 : log(c1)
