@@ -69,7 +69,7 @@ exogenous:
         Sigma: [[ sig_a1, corr_a ],
                 [ corr_a, sig_a2 ]]
 
-    f: !Normal
+    f: !VAR1
         rho: rho_f
         Sigma: [[sig_f]]
 
