@@ -1,0 +1,90 @@
+name: ROEM_Fin
+
+symbols:
+
+   exogenous: [a1, a2, f]
+   states: [d]
+   controls: [b, p, m1, m2]
+   values: [V1, V2]
+   parameters: [beta, b_lower, b_upper, rho_a, sig_a1, sig_a2, corr_a, rho_f, sig_f]
+
+definitions:
+
+    y1: exp(a1)
+    y2: exp(a2)
+    c1: y1 + d*f - b*p
+    c2: y2 - d*f + b*p
+    Lambda: (b-b_lower)/(b_upper-b_lower)
+
+equations:
+
+    arbitrage:
+        - m2 - m1  | b_lower <= b <= b_upper
+        - p = Lambda*m1 + (1-Lambda)*m2   #| -inf <= p <= inf
+        - m1 = f*beta*(c1/c1(1))
+        - m2 = f*beta*(c2/c2(1))
+ 
+    transition:
+        - d = b(-1)
+
+    value:
+        - V1 = log(c1) + beta*V1(1)
+        - V2 = log(c2) + beta*V2(1)
+
+calibration:
+
+    # parameters
+    beta    : 0.96
+    b_lower : -10
+    b_upper : 10
+    rho_a   : 0.9
+    sig_a1  : 0.025
+    sig_a2  : 0.05
+    corr_a  : 0
+    rho_f   : 0
+    sig_f   : 0.02
+
+    # exogenous variables
+    a1      : 0
+    a2      : 0
+    f       : 0
+
+    # endogenous variables
+    d  : 0
+    b  : d
+    p  : beta
+    y1 : exp(a1)
+    y2 : exp(a2)
+    c1 : y1 + d - b*p
+    c2 : y2 - d + b*p
+    m1 : beta
+    m2 : beta
+    V1 : log(c1)
+    V2 : log(c2)
+    Lambda : (b-b_lower)/(b_upper-b_lower)
+
+exogenous:
+    a1, a2: !VAR1
+        rho: rho_a
+        Sigma: [[ sig_a1, corr_a ],
+                [ corr_a, sig_a2 ]]
+
+    f: !Normal
+        rho: rho_f
+        Sigma: [[sig_f]]
+
+#exogenous: !VAR1
+#    rho: a_rho
+#    Sigma: [[ sig_a1, corr_a ],
+#            [ corr_a, sig_a2 ]]
+
+domain:
+    d  : [-5, 5]
+
+options:
+    grid: !Cartesian
+        Order: [30]
+# options:
+#     grid: !Smolyak
+#         mu: 3
+#         # orders: [5, 50]
