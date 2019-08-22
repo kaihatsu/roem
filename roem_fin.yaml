@@ -66,17 +66,17 @@ calibration:
 exogenous: !Product
     a1, a2: !VAR1
         rho: rho_a
-        Sigma: [[ sig_a1, corr_a ],
-                [ corr_a, sig_a2 ]]
+        Sigma: [[ sig_a1^2, corr_a   ],
+                [ corr_a  , sig_a2^2 ]]
 
     f: !VAR1
         rho: rho_f
-        Sigma: [[sig_f]]
+        Sigma: [[sig_f^2]]
 
 #exogenous: !VAR1
 #    rho: a_rho
-#    Sigma: [[ sig_a1, corr_a ],
-#            [ corr_a, sig_a2 ]]
+#    Sigma: [[ sig_a1^2, corr_a   ],
+#            [ corr_a  , sig_a2^2 ]]
 
 domain:
     d  : [-5, 5]
