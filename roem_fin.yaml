@@ -63,7 +63,7 @@ calibration:
     V2 : log(c2)
     Lambda : (b-b_lower)/(b_upper-b_lower)
 
-exogenous:
+exogenous: !Product
     a1, a2: !VAR1
         rho: rho_a
         Sigma: [[ sig_a1^2, corr_a   ],
