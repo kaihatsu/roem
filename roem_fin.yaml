@@ -73,11 +73,6 @@ exogenous: #!Product
         rho: rho_f
         Sigma: [[sig_f^2]]
 
-#exogenous: !VAR1
-#    rho: a_rho
-#    Sigma: [[ sig_a1^2, corr_a   ],
-#            [ corr_a  , sig_a2^2 ]]
-
 domain:
     d  : [-5, 5]
 
